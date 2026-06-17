@@ -117,7 +117,12 @@ const reader = async _=>{
         }
     );
     writeFileSync('dist/样式.css',cssText.css,'utf8');
-    copyFileSync('html/字体.woff','dist/字体.woff');
+    const 字体文件们 = ['字体.woff2','字体.woff'];
+    for(const 文件 of 字体文件们){
+        if(existsSync('html/'+文件)){
+            copyFileSync('html/'+文件,'dist/'+文件);
+        }
+    }
 };
 
 reader();

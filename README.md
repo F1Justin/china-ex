@@ -1,12 +1,8 @@
 ![中国制霸生成器](cover.png)
-# 中国制霸生成器
-中国三十四省级行政区域制霸标记生成工具
+# 中国地级制霸生成器
+中国地级行政区域制霸标记生成工具
 
-https://lab.magiconch.com/china-ex/
-
-有感兴趣画简化矢量地图的小伙伴欢迎来一起整活儿~ 
-
-## [全球版在这里！🤗](https://github.com/itorr/world-ex)
+计划部署地址：`https://lab.f1jutsin.com/china-ex/`
 
 ## 功能
 可以在线标记 居住、短居、游玩、出差、路过 标记后可生成图片进行社区分享
@@ -14,9 +10,11 @@ https://lab.magiconch.com/china-ex/
 标记过的信息会记录到本地存储，有什么新进展再次打开网页更新即可
 
 ## 说明
-简化地图在保留了地缘相接特征的基础上把省级行政区域尽可能简化成了方框，目标是把省级行政区域之间的关系通过画面展现到一目了然的程度
+地图使用真实行政边界，省、自治区展开到地级行政区；北京、天津、上海、重庆以及港澳台保留为单独可标记区域。
 
-仅三十四省级行政区域可标记，九段线西沙南沙等群岛在地图上有标示
+大陆省、自治区下辖地级行政区共 333 个，加上四个直辖市和港澳台，共 340 个区域可标记。南海诸岛在地图上有标示。
+
+边界数据来自 DataV.GeoAtlas，生成脚本为 `生成真实边界.js`。本项目基于神奇海螺的中国制霸生成器改造，保留 credit。
 
 ## 关于等级
 
@@ -48,13 +46,13 @@ https://lab.magiconch.com/china-ex/
 https://weibo.com/1197780522/MaCGDCt6N
 
 ## GitHub
-https://github.com/itorr/china-ex
+https://github.com/F1Justin/china-ex
 
 ## 反馈
-https://github.com/itorr/china-ex/issues
+https://github.com/F1Justin/china-ex/issues
 
 ## 使用了
-腾祥嘉丽大圆
+腾祥嘉丽大圆 / DataV.GeoAtlas
 
 ## 协议
 允许非商用非盈利的利用

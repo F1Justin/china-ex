@@ -1,3 +1,18 @@
+@font-face{
+    font-family: '字体';
+    src: url('字体.woff2') format('woff2');
+    font-display: swap;
+}
+
+#分数显示{
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    font-size: 18px;
+    color: #111;
+    z-index: 2;
+    pointer-events: none;
+}
 html{
     font: 18px/40px '字体',sans-serif;
     background-color: #efb4b4;
@@ -5,17 +20,27 @@ html{
 }
 body{
     margin: 0;
+    position: fixed;
+    inset: 0;
+    width: 100%;
 }
 html,
 body{
     height:100%;
     overflow: hidden;
+    overscroll-behavior: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 svg{
     display: block;
     width: 100%;
     height: 100%;
-    pointer-events: none;
+    pointer-events: auto;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
     a{
         pointer-events: auto;
     }
@@ -61,6 +86,34 @@ a{
         &[data-level="1"]{background:#88AEFF;}
     }
 }
+#地图控制{
+    display: none;
+    position: fixed;
+    z-index: 2;
+    top: calc(env(safe-area-inset-top, 0) + 10px);
+    right: calc(env(safe-area-inset-right, 0) + 10px);
+    flex-direction: column;
+    gap: 8px;
+    button{
+        width: 48px;
+        height: 48px;
+        padding: 0;
+        border: 3px solid #111;
+        border-radius: 4px;
+        background: #FFF;
+        color: #111;
+        box-shadow: 2px 4px 0 rgba(0,0,0,.1);
+        font: 26px/42px '字体',sans-serif;
+        cursor: pointer;
+        touch-action: manipulation;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+}
+svg #地区 path[data-active]{
+    stroke: #000;
+    stroke-width: 2.2;
+}
 .按钮{
     background: #FFF;
     box-shadow: 0 0 0 4px #111;
@@ -80,6 +133,11 @@ footer{
         &.按钮{
             margin-left: 12px;
         }
+    }
+    span{
+        float: left;
+        padding: 8px 12px;
+        opacity: .78;
     }
 }
 #输出{
@@ -136,9 +194,51 @@ footer{
         }
     }
 }
+@media (max-width:800px), (pointer: coarse) {
+    #分数显示{
+        top: 12px;
+        bottom: auto;
+    }
+    #数据来源{
+        display: none;
+    }
+    #地图控制{
+        display: flex;
+    }
+    #设置等级{
+        position: fixed;
+        left: 50%;
+        right: auto;
+        bottom: calc(env(safe-area-inset-bottom, 0) + 10px);
+        width: calc(100vw - 20px);
+        max-width: 520px;
+        margin: 0 auto;
+        transform: translateX(-50%);
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        border-radius: 6px;
+        box-shadow: 0 8px 24px rgba(0,0,0,.18);
+        border-width: 2px;
+        h2{
+            grid-column: 1 / -1;
+            min-width: 0;
+            padding: 8px 12px;
+            font-size: 18px;
+            line-height: 28px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        a{
+            min-width: 0;
+            padding: 0 6px;
+            font-size: 16px;
+            line-height: 44px;
+        }
+    }
+}
 @media (max-width:480px) and (min-height:600px) {
     footer{
-        bottom: 50px;
+        bottom: calc(env(safe-area-inset-bottom, 0) + 6px);
     }
     #输出{
         img{

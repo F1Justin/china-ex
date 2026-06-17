@@ -1,0 +1,16 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": null,
+  "trailingSlash": true,
+  "rewrites": [
+    {
+      "source": "/china-ex",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/china-ex/:path*",
+      "destination": "/:path*"
+    }
+  ]
+}
