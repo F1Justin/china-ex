@@ -139,8 +139,10 @@ const 投影 = 坐标 => {
 
 const 环转路径 = 环 => {
     if (!环.length) return '';
-    return 环.map((坐标, 下标) => {
-        const 点 = 投影(坐标);
+    const 点们 = 环.map(坐标 => 投影(坐标));
+    const xs = 点们.map(p => p[0]), ys = 点们.map(p => p[1]);
+    if (Math.max(...xs) - Math.min(...xs) < 1 && Math.max(...ys) - Math.min(...ys) < 1) return '';
+    return 点们.map((点, 下标) => {
         return `${下标 ? 'L' : 'M'}${格式化(点[0])} ${格式化(点[1])}`;
     }).join('') + 'Z';
 };
@@ -183,7 +185,7 @@ const 省界路径 = 全国.features
     .map(要素 => `\t<path d="${几何转路径(要素.geometry)}"/>`)
     .join('\n');
 
-const 南海路径 = 南海诸岛 ? `\t<path d="${几何转路径(南海诸岛.geometry)}"/>` : '';
+const 南海路径 = '';
 
 const SVG = `<?xml version="1.0" encoding="utf-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${宽} ${高}" preserveAspectRatio="xMidYMid meet">
