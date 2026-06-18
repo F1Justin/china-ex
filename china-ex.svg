@@ -28,7 +28,7 @@ text{
 }
 #地区 path:hover{
     fill:#F7F7F7;
-    stroke-width:1.3;
+    stroke-width:1;
 }
 #地区 path[level="5"]{fill:#FF7E7E;}
 #地区 path[level="4"]{fill:#FFB57E;}
