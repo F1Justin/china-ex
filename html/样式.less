@@ -143,6 +143,7 @@ footer{
 #输出{
     display: flex;
     position: fixed;
+    z-index: 10;
     top: 0;
     right: 0;
     bottom: 0;
@@ -156,8 +157,11 @@ footer{
     align-items: center;
     img{
         display: block;
-        width: 480px;
-        height: 480px;
+        width: auto;
+        height: auto;
+        max-width: min(960px, calc(100vw - 32px));
+        max-height: calc(100vh - 170px);
+        object-fit: contain;
         margin: 0 auto;
         box-shadow: 0 5px 20px rgba(0,0,0,.1);
     }
@@ -239,12 +243,6 @@ footer{
 @media (max-width:480px) and (min-height:600px) {
     footer{
         bottom: calc(env(safe-area-inset-bottom, 0) + 6px);
-    }
-    #输出{
-        img{
-            width: 100vw;
-            height: 100vw;
-        }
     }
 }
 

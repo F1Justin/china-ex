@@ -57,6 +57,7 @@ const $ = (名,元素 = 文档) => 元素.querySelector(名);
 const 背景色 = '#efb4b4';
 const 本地存储等级们钥匙 = 'china-ex-real-levels-v1';
 const 保存文件名 = `[中国地级制霸].png`;
+const 三沙代码 = '460300';
 
 const 宽 = 1134;
 const 高 = 976;
@@ -522,11 +523,21 @@ const 获取合并盒 = 元素们=>{
         };
     },null);
 };
-const 克隆SVG组 = 选择器=>{
+const 克隆SVG组 = (选择器,调整)=>{
     const 克隆 = $(选择器,图形).cloneNode(真);
     克隆.querySelectorAll('[data-active]').forEach(元素=>元素[清除属性]('data-active'));
+    if(调整) 调整(克隆);
     return 克隆.outerHTML;
 };
+const 获取导出主地图元素们 = _=>[...地区.querySelectorAll('path[data-code]')]
+    .filter(元素=>元素[获取属性]('data-code') !== 三沙代码);
+const 获取等级颜色 = 元素=>({
+    5:'#FF7E7E',
+    4:'#FFB57E',
+    3:'#FFE57E',
+    2:'#A8FFBE',
+    1:'#88AEFF'
+})[元素 && 元素[获取属性](等级)] || '#FFF';
 const 生成图例 = (左,上,宽度值,行高)=>{
     const 项们 = [
         ['#FF7E7E','居住 5'],
@@ -537,53 +548,67 @@ const 生成图例 = (左,上,宽度值,行高)=>{
         ['#FFF','没去过']
     ];
     const 背景 = 项们.map((项,下标)=>`<path fill="${项[零]}" d="M${左} ${上 + 行高 * 下标}h${宽度值}v${行高}H${左}Z"/>`).join('');
-    const 文字 = 项们.map((项,下标)=>`<text x="${左 + 48}" y="${上 + 行高 * 下标 + 62}" class="${下标 === 项们.length - 1 ? 'legend-text legend-empty-text' : 'legend-text'}">${项[1]}</text>`).join('');
+    const 文字 = 项们.map((项,下标)=>`<text x="${左 + 宽度值 / 二}" y="${上 + 行高 * (下标 + .5)}" text-anchor="middle" dominant-baseline="middle" class="legend-text">${项[1]}</text>`).join('');
     return `${背景}<path class="legend-border" d="M${左} ${上}h${宽度值}v${行高 * 项们.length}H${左}Z"/>${文字}`;
 };
 const 生成导出SVG = async _=>{
     const 字体 = await 读取字体数据地址();
-    const 字体规则 = 字体 ? `@font-face{font-family:'字体';src:url(${字体}) format('woff');}` : '';
+    const 字体规则 = 字体 ? `@font-face{font-family:'字体';src:url(${字体}) format('woff2');}` : '';
     const 背景 = 背景色;
     const 文字 = '#111';
     const 地图文字 = 文字;
     const 地图线 = 文字;
     const 省线 = 地图线;
     const 未去过 = '#FFF';
-    const 地图盒 = 获取合并盒([地区,$('#省界',图形),$('#南海诸岛',图形)]);
-    const 地图目标 = {左:160,上:330,宽:2320,高:1690};
+    const 三沙颜色 = 获取等级颜色($(`[data-code="${三沙代码}"]`,地区));
+    const 地图盒 = 获取合并盒(获取导出主地图元素们());
+    const 地图目标 = {左:100,上:98,宽:3000,高:2204};
     const 地图宽 = 地图盒.右 - 地图盒.左;
     const 地图高 = 地图盒.下 - 地图盒.上;
     const 地图比例 = 数学[最小](地图目标.宽 / 地图宽,地图目标.高 / 地图高);
     const 地图左 = 地图目标.左 + (地图目标.宽 - 地图宽 * 地图比例) / 二 - 地图盒.左 * 地图比例;
     const 地图上 = 地图目标.上 + (地图目标.高 - 地图高 * 地图比例) / 二 - 地图盒.上 * 地图比例;
-    const 地图组 = `<g transform="translate(${格式化数字(地图左)} ${格式化数字(地图上)}) scale(${格式化数字(地图比例)})">${克隆SVG组('#地区')}${克隆SVG组('#省界')}${克隆SVG组('#南海诸岛')}</g>`;
+    const 裁剪边距 = 3;
+    const 裁剪左 = 地图盒.左 - 裁剪边距;
+    const 裁剪上 = 地图盒.上 - 裁剪边距;
+    const 裁剪宽 = 地图宽 + 裁剪边距 * 二;
+    const 裁剪高 = 地图高 + 裁剪边距 * 二;
+    const 地区副本 = 克隆SVG组('#地区',克隆=>{
+        const 三沙 = 克隆.querySelector(`[data-code="${三沙代码}"]`);
+        if(三沙) 三沙.remove();
+    });
+    const 地图组 = `<g transform="translate(${格式化数字(地图左)} ${格式化数字(地图上)}) scale(${格式化数字(地图比例)})"><g clip-path="url(#export-map-clip)">${地区副本}${克隆SVG组('#省界')}</g></g>`;
     const 当前分数 = (分数显示元素[肉] || '分数: 0').replace(/\s+/g,' ');
     return `<?xml version="1.0" encoding="utf-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${导出宽} ${导出高}" width="${导出宽}" height="${导出高}">
+<defs><clipPath id="export-map-clip"><rect x="${格式化数字(裁剪左)}" y="${格式化数字(裁剪上)}" width="${格式化数字(裁剪宽)}" height="${格式化数字(裁剪高)}"/></clipPath></defs>
 <style>
 ${字体规则}
 text{font-family:'字体',sans-serif;fill:${文字};}
 #export-title{font-size:132px;}
-#export-score{font-size:92px;}
-#export-credit{font-size:42px;opacity:.82;}
-.legend-text{font-size:58px;fill:#111;}
-.legend-empty-text{fill:${文字};}
-#地区 path{fill:${未去过};fill-rule:evenodd;clip-rule:evenodd;stroke:${地图线};stroke-width:.75;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;}
+#export-score{font-size:84px;}
+#export-domain,#export-credit{font-size:56px;}
+.legend-text{font-size:56px;fill:#111;}
+#地区 path{fill:${未去过};fill-rule:evenodd;clip-rule:evenodd;stroke:${地图线};stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;}
 #地区 path[level="5"]{fill:#FF7E7E;}
 #地区 path[level="4"]{fill:#FFB57E;}
 #地区 path[level="3"]{fill:#FFE57E;}
 #地区 path[level="2"]{fill:#A8FFBE;}
 #地区 path[level="1"]{fill:#88AEFF;}
-#省界 path{fill:none;stroke:${省线};stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;}
-#南海诸岛 path{fill:none;stroke:${地图线};stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;}
+#省界 path{fill:none;stroke:${省线};stroke-width:3;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;}
+#export-sansha{fill:${三沙颜色};stroke:${地图线};stroke-width:1.5;}
+#export-sansha-label{font-size:40px;}
 .legend-border{fill:none;stroke:${地图线};stroke-width:8;stroke-linejoin:round;}
 </style>
 <rect width="${导出宽}" height="${导出高}" fill="${背景}"/>
-<text x="${导出宽 / 二}" y="210" text-anchor="middle" id="export-title">中国地级制霸</text>
+<text x="${导出宽 / 二}" y="220" text-anchor="middle" id="export-title">中国地级制霸</text>
 ${地图组}
-<g id="export-legend">${生成图例(2620,760,340,142)}</g>
-<text x="120" y="2220" id="export-score">${当前分数}</text>
-<text x="${导出宽 - 120}" y="2220" id="export-credit" text-anchor="end">Credit: 神奇海螺 · DataV.GeoAtlas</text>
+<ellipse id="export-sansha" cx="1997" cy="2262" rx="37" ry="34"/>
+<text x="2060" y="2283" id="export-sansha-label">三沙市</text>
+<g id="export-legend">${生成图例(2692,1458,408,133.333)}</g>
+<text x="150" y="2070" id="export-domain">lab.f1justin.com</text>
+<text x="151" y="2150" id="export-credit">Credit:神奇海螺</text>
+<text x="140" y="2250" id="export-score">${当前分数}</text>
 </svg>`;
 };
 const 保存图像 = async _=>{
